@@ -6,10 +6,11 @@ users = APIRouter(prefix="/users", tags=["users"])
 
 @users.post("/")
 def create_user(usuario: UserCreate, session: SessionDep):
-    session.add(usuario)
+    db_user = User(nombre=usuario.nombre, email=usuario.email)
+    session.add(db_user)
     session.commit()
-    session.refresh(usuario)
-    return usuario
+    session.refresh(db_user)
+    return db_user
 @users.get("/")
 def listar_usuarios(session: SessionDep):
     usuarios = session.exec(select(User)).all()
