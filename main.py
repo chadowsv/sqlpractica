@@ -3,9 +3,11 @@ from sqlmodel import select
 from contextlib import asynccontextmanager
 from db import create_all_tables, SessionDep
 from routes.users import users
+from routes.books import books
 #Ejecucion de create_all_tables al iniciar la aplicacion
 app = FastAPI(lifespan=create_all_tables)
 app.include_router(users)
+app.include_router(books)
 
 @app.get("/")
 def read_root():
