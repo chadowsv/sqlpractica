@@ -1,7 +1,10 @@
 from sqlmodel import SQLModel, Field
 from typing import Optional
-class Usuario(SQLModel, table=True):
+class User(SQLModel, table=True):
     id:Optional[int] = Field(default=None, primary_key=True)
+    nombre:str
+    email:str
+class UserCreate(SQLModel):
     nombre:str
     email:str
     

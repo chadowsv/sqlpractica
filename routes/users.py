@@ -1,26 +1,26 @@
 from fastapi import APIRouter, HTTPException
 from sqlmodel import select
 from db import SessionDep
-from models.usuario import Usuario
+from models.usuario import UserCreate, User
 users = APIRouter(prefix="/users", tags=["users"])
 
 @users.post("/")
-def create_user(usuario: Usuario, session: SessionDep):
+def create_user(usuario: UserCreate, session: SessionDep):
     session.add(usuario)
     session.commit()
     session.refresh(usuario)
     return usuario
 @users.get("/")
 def listar_usuarios(session: SessionDep):
-    usuarios = session.exec(select(Usuario)).all()
+    usuarios = session.exec(select(User)).all()
     return usuarios
 @users.get("/{usuario_id}")
 def obtener_usuario(usuario_id: int, session: SessionDep):
-    usuario = session.get(Usuario, usuario_id)
+    usuario = session.get(User, usuario_id)
     return usuario
 @users.put("/{usuario_id}")
-def actualizar_usuario(usuario_id: int, datos: Usuario, session: SessionDep):
-    usuario = session.get(Usuario, usuario_id)
+def actualizar_usuario(usuario_id: int, datos: User, session: SessionDep):
+    usuario = session.get(User, usuario_id)
 
     if not usuario:
         return {"error": "No encontrado"}
@@ -34,7 +34,7 @@ def actualizar_usuario(usuario_id: int, datos: Usuario, session: SessionDep):
     return usuario
 @users.delete("/{usuario_id}")
 def eliminar_usuario(usuario_id: int, session: SessionDep):
-    usuario = session.get(Usuario, usuario_id)
+    usuario = session.get(User, usuario_id)
     if not usuario:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     session.delete(usuario)
